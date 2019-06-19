@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { CssBaseline } from '@material-ui/core';
 
 const App = () => {
   return (
-    <div className="App">
+    <Fragment>
       <CssBaseline />
       <h3>Hello world</h3>
-    </div>
+    </Fragment>
   );
 }
 

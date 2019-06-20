@@ -1,4 +1,4 @@
-import { REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR } from './authConstants';
+import { REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL } from './authConstants';
 import { toastr } from 'react-redux-toastr';
 import { reset } from 'redux-form'
 import axios from 'axios';
@@ -42,6 +42,7 @@ export const register = user => {
         type: REGISTER_SUCCESS,
         payload: res.data
       });
+      dispatch(loadUser());
       dispatch(reset('registerForm'));
       toastr.success('Success', `Welcome ${user.name}`);
     }
@@ -55,6 +56,44 @@ export const register = user => {
       dispatch(reset('registerForm'))
       dispatch({
         type: REGISTER_FAIL
+      });
+    }
+  }
+}
+
+export const login = user => {
+  return async dispatch => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    const body = JSON.stringify(user);
+    try {
+      const res = await axios.post('/api/auth', body, config);
+
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: res.data
+      });
+      dispatch(loadUser());
+      dispatch(reset('loginForm'));
+
+      toastr.success('Success', `Welcome back`);
+    }
+    catch (error) {
+      const errors = error.response.data.errors;
+
+      if (errors) {
+        errors.forEach(error => {
+          toastr.error('Error', error.msg);
+        });
+      }
+
+      dispatch(reset('loginForm'))
+      dispatch({
+        type: LOGIN_FAIL
       });
     }
   }

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 import {
   combineValidators,
@@ -186,6 +187,14 @@ const RegisterForm = ({ classes, handleSubmit, invalid, submitting, register }) 
       </div>
     </Container>
   )
+}
+
+RegisterForm.propTypes = {
+  register: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  classes: PropTypes.object.isRequired,
+  invalid: PropTypes.bool.isRequired,
+  submitting: PropTypes.bool.isRequired,
 }
 
 const actions = {

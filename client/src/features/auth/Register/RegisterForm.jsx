@@ -114,7 +114,7 @@ const RegisterForm = ({ classes, handleSubmit, invalid, submitting, register, is
   }
 
   if (isAuthenticated) {
-    return <Redirect to="/dashboard" />
+    return <Redirect to="/posts" />
   }
 
   return (

@@ -9,6 +9,7 @@ import NavBar from '../../features/nav/NavBar/NavBar';
 import RegisterForm from '../../features/auth/Register/RegisterForm';
 import { loadUser } from '../../features/auth/authActions';
 import setAuthToken from '../common/util/setAuthToken';
+import LoginForm from '../../features/auth/Login/LoginForm';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token)
@@ -24,6 +25,7 @@ const App = ({ store }) => {
       <NavBar />
       <Switch>
         <Route exact path="/register" component={RegisterForm} />
+        <Route exact path="/login" component={LoginForm} />
       </Switch>
     </Fragment>
   );

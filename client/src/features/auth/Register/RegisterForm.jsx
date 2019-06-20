@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, Redirect } from 'react-router-dom';
 import {
   combineValidators,
   composeValidators,
@@ -107,10 +107,14 @@ const styles = theme => ({
   },
 });
 
-const RegisterForm = ({ classes, handleSubmit, invalid, submitting, register }) => {
+const RegisterForm = ({ classes, handleSubmit, invalid, submitting, register, isAuthenticated }) => {
 
   const registerUser = values => {
     register(values);
+  }
+
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />
   }
 
   return (
@@ -192,17 +196,22 @@ const RegisterForm = ({ classes, handleSubmit, invalid, submitting, register }) 
 RegisterForm.propTypes = {
   register: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
   classes: PropTypes.object.isRequired,
   invalid: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
 }
+
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
 
 const actions = {
   register
 }
 
 export default compose(
-  connect(null, actions),
+  connect(mapStateToProps, actions),
   reduxForm({ form: 'registerForm', validate }),
   withStyles(styles)
 )(RegisterForm)

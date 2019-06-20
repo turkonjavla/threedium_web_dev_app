@@ -12,6 +12,9 @@ import Typography from '@material-ui/core/Typography';
 import SignedOutLinks from '../Menu/SignedOutLinks';
 import SignedInLinks from '../Menu/SignedInLinks';
 
+/* Actions */
+import { logout } from '../../auth/authActions';
+
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -24,7 +27,7 @@ const styles = theme => ({
 
 class NavBar extends Component {
   render() {
-    const { classes, isAuthenticated } = this.props;
+    const { classes, isAuthenticated, logout } = this.props;
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -33,10 +36,8 @@ class NavBar extends Component {
               Threedium
             </Typography>
             {
-              isAuthenticated &&
-                isAuthenticated ?
-                isAuthenticated &&
-                <SignedInLinks /> : <SignedOutLinks />
+              isAuthenticated ?
+                <SignedInLinks logout={logout} /> : <SignedOutLinks />
             }
           </Toolbar>
         </AppBar>
@@ -48,13 +49,18 @@ class NavBar extends Component {
 NavBar.propTypes = {
   isAuthenticated: PropTypes.bool,
   classes: PropTypes.object.isRequired,
+  logout: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated
 });
 
+const actions = {
+  logout
+}
+
 export default compose(
-  connect(mapStateToProps),
+  connect(mapStateToProps, actions),
   withStyles(styles)
 )(NavBar);

@@ -1,4 +1,12 @@
-import { REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL } from './authConstants';
+import {
+  REGISTER_SUCCESS,
+  REGISTER_FAIL,
+  USER_LOADED,
+  AUTH_ERROR,
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
+  LOGOUT
+} from './authConstants';
 import { toastr } from 'react-redux-toastr';
 import { reset } from 'redux-form'
 import axios from 'axios';
@@ -68,8 +76,8 @@ export const login = user => {
         'Content-Type': 'application/json'
       }
     };
-
     const body = JSON.stringify(user);
+    
     try {
       const res = await axios.post('/api/auth', body, config);
 
@@ -96,5 +104,13 @@ export const login = user => {
         type: LOGIN_FAIL
       });
     }
+  }
+}
+
+export const logout = () => {
+  return dispatch => {
+    dispatch({
+      type: LOGOUT
+    });
   }
 }

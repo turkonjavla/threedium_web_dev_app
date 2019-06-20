@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 /* MUI Components */
 import { withStyles } from '@material-ui/core/styles';
@@ -14,6 +15,7 @@ const styles = theme => ({
   },
   title: {
     flexGrow: 1,
+    textDecoration: 'none'
   }
 });
 
@@ -41,7 +43,7 @@ class NavBar extends Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <Typography variant="h6" className={classes.title}>
+            <Typography component={Link} to="/" variant="h6" color="inherit" className={classes.title}>
               Threedium
             </Typography>
             {

@@ -8,7 +8,7 @@ const SignedOutLinks = ({ login }) => {
   return (
     <Fragment>
       <Button color="inherit" size="small" onClick={login}>Login</Button>
-      <Button variant="contained" size="small" color="secondary">Sign Up</Button>
+      <Button component={Link} to="/register" variant="contained" size="small" color="secondary">Sign Up</Button>
     </Fragment>
   )
 }

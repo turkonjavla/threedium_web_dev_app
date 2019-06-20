@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 import { Link } from 'react-router-dom';
 
 /* MUI Components */
@@ -20,25 +23,8 @@ const styles = theme => ({
 });
 
 class NavBar extends Component {
-  state = {
-    auth: false
-  }
-
-  handleLogin = () => {
-    this.setState({
-      auth: true
-    });
-  }
-
-  handleLogout = () => {
-    this.setState({
-      auth: false
-    });
-  }
-
   render() {
-    const { classes } = this.props;
-    const { auth } = this.state;
+    const { classes, isAuthenticated } = this.props;
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -47,9 +33,10 @@ class NavBar extends Component {
               Threedium
             </Typography>
             {
-              auth
-                ? <SignedInLinks logout={this.handleLogout} />
-                : <SignedOutLinks login={this.handleLogin} />
+              isAuthenticated &&
+                isAuthenticated ?
+                isAuthenticated &&
+                <SignedInLinks /> : <SignedOutLinks />
             }
           </Toolbar>
         </AppBar>
@@ -58,4 +45,16 @@ class NavBar extends Component {
   }
 }
 
-export default withStyles(styles)(NavBar);
+NavBar.propTypes = {
+  isAuthenticated: PropTypes.bool,
+  classes: PropTypes.object.isRequired,
+}
+
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default compose(
+  connect(mapStateToProps),
+  withStyles(styles)
+)(NavBar);

@@ -24,7 +24,7 @@ let render = () => {
           transitionOut="fadeOut"
           preventDuplicates
         />
-        <App />
+        <App store={store} />
       </Router>
     </Provider>,
     rootElement

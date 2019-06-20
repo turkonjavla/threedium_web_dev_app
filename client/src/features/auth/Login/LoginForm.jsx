@@ -1,14 +1,12 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Link as RouterLink, Redirect } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   combineValidators,
   composeValidators,
   isRequired,
-  createValidator,
-  hasLengthBetween,
-  matchesField,
-  hasLengthLessThan
+  createValidator
 } from 'revalidate';
 
 /* MUI Components */
@@ -31,7 +29,7 @@ import { Field, reduxForm } from 'redux-form';
 import TextInput from '../../../app/common/form/TextInput';
 
 /* Actions */
-import { register } from '../authActions';
+import { login } from '../authActions';
 
 const isValidEmail = createValidator(
   message => value => {
@@ -42,43 +40,14 @@ const isValidEmail = createValidator(
   'Invalid email address'
 )
 
-const noWhitespace = createValidator(
-  message => value => {
-    if (value && !/^[\x21-\x7E]+$/i.test(value)) {
-      return message
-    }
-  },
-  'No whitespaces allowed'
-)
-
-const specialCharacters = createValidator(
-  message => value => {
-    if (value && !/^[a-zA-Z0-9#$&.+,"]*$/i.test(value)) {
-      return message
-    }
-  },
-  'Only | # | $ | & | . | + | , | allowed'
-)
-
 /* Validation */
 const validate = combineValidators({
-  name: composeValidators(
-    isRequired({ message: 'Please enter your full name' }),
-    hasLengthLessThan(300)({ message: 'You name can\'t be more than 300 characters' })
-  )(),
   email: composeValidators(
     isRequired('Email'),
     isValidEmail
   )(),
   password: composeValidators(
-    isRequired('Password'),
-    hasLengthBetween(6, 30)({ message: 'Password must be between 6 and 30 characters' }),
-    noWhitespace,
-    specialCharacters
-  )(),
-  confirmPassword: composeValidators(
-    isRequired({ message: 'Please confirm your password' }),
-    matchesField('password')({ message: 'Passwords don\'t match' })
+    isRequired('Password')
   )()
 })
 
@@ -107,12 +76,13 @@ const styles = theme => ({
   },
 });
 
-const RegisterForm = ({ classes, handleSubmit, invalid, submitting, register, isAuthenticated }) => {
+const LoginForm = ({ classes, handleSubmit, invalid, submitting, login, isAuthenticated }) => {
 
-  const registerUser = values => {
-    register(values);
+  const loginUser = values => {
+    login(values);
   }
 
+  // redirect if logged in
   if (isAuthenticated) {
     return <Redirect to="/dashboard" />
   }
@@ -125,20 +95,10 @@ const RegisterForm = ({ classes, handleSubmit, invalid, submitting, register, is
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          Sign In
         </Typography>
-        <form className={classes.form} noValidate onSubmit={handleSubmit(registerUser)}>
+        <form className={classes.form} onSubmit={handleSubmit(loginUser)}>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Field
-                autoComplete="off"
-                label="Full Name"
-                name="name"
-                type="text"
-                variant="outlined"
-                component={TextInput}
-              />
-            </Grid>
             <Grid item xs={12}>
               <Field
                 autoComplete="off"
@@ -159,16 +119,6 @@ const RegisterForm = ({ classes, handleSubmit, invalid, submitting, register, is
                 component={TextInput}
               />
             </Grid>
-            <Grid item xs={12}>
-              <Field
-                autoComplete="off"
-                label="Confirm Password"
-                name="confirmPassword"
-                type="password"
-                variant="outlined"
-                component={TextInput}
-              />
-            </Grid>
           </Grid>
           <Button
             type="submit"
@@ -182,8 +132,8 @@ const RegisterForm = ({ classes, handleSubmit, invalid, submitting, register, is
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link component={RouterLink} to="/login" variant="body2">
-                Already have an account? Sign in
+              <Link component={RouterLink} to="/register" variant="body2">
+                Don't have an account? Sign up
               </Link>
             </Grid>
           </Grid>
@@ -193,10 +143,10 @@ const RegisterForm = ({ classes, handleSubmit, invalid, submitting, register, is
   )
 }
 
-RegisterForm.propTypes = {
-  register: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
+LoginForm.propTypes = {
+  login: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
+  handleSubmit: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   invalid: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
@@ -207,11 +157,11 @@ const mapStateToProps = state => ({
 });
 
 const actions = {
-  register
+  login
 }
 
 export default compose(
   connect(mapStateToProps, actions),
-  reduxForm({ form: 'registerForm', validate }),
+  reduxForm({ form: 'loginForm', validate }),
   withStyles(styles)
-)(RegisterForm)
+)(LoginForm)

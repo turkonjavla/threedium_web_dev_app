@@ -10,7 +10,7 @@ import { Container, Grid, withStyles } from '@material-ui/core';
 import PostItem from './PostItem';
 
 /* Actions */
-import { getPosts } from '../postActions';
+import { getPosts, removePost } from '../postActions';
 
 const styles = theme => ({
   mainGrid: {
@@ -18,7 +18,7 @@ const styles = theme => ({
   }
 })
 
-const PostDashboard = ({ getPosts, post: { posts, loading }, classes, auth }) => {
+const PostDashboard = ({ getPosts, post: { posts, loading }, classes, auth, removePost }) => {
   useEffect(() => {
     getPosts();
   }, [getPosts]);
@@ -31,6 +31,7 @@ const PostDashboard = ({ getPosts, post: { posts, loading }, classes, auth }) =>
           posts &&
           posts.map(post =>
             <PostItem
+              removePost={removePost}
               key={post._id}
               post={post}
               auth={auth}
@@ -44,6 +45,7 @@ const PostDashboard = ({ getPosts, post: { posts, loading }, classes, auth }) =>
 
 PostDashboard.propTypes = {
   getPosts: PropTypes.func.isRequired,
+  removePost: PropTypes.func.isRequired,
   post: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
@@ -56,7 +58,8 @@ const mapStateToProps = state => ({
 });
 
 const actions = {
-  getPosts
+  getPosts,
+  removePost
 }
 
 export default compose(

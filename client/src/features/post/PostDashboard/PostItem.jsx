@@ -27,7 +27,7 @@ const styles = theme => ({
   }
 })
 
-const PostItem = ({ post, classes, auth }) => {
+const PostItem = ({ post, classes, auth, removePost }) => {
   return (
     <Grid item justifycontent="center" key={post.title} xs={12} md={6}>
       <Card className={classes.card}>
@@ -54,7 +54,7 @@ const PostItem = ({ post, classes, auth }) => {
               !auth.loading &&
               post.user === auth.user._id &&
               (
-                <Button size="small" color="secondary">
+                <Button onClick={() => removePost(post._id)} size="small" color="secondary">
                   Remove
                 </Button>
               )
@@ -76,7 +76,8 @@ const PostItem = ({ post, classes, auth }) => {
 PostItem.propTypes = {
   post: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
+  removePost: PropTypes.func.isRequired
 }
 
 export default withStyles(styles)(PostItem)

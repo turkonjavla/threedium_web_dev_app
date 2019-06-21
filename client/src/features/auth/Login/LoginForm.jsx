@@ -128,7 +128,7 @@ const LoginForm = ({ classes, handleSubmit, invalid, submitting, login, isAuthen
             className={classes.submit}
             disabled={invalid || submitting}
           >
-            Sign Up
+            Sign In
           </Button>
           <Grid container justify="flex-end">
             <Grid item>

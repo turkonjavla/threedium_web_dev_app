@@ -25,7 +25,7 @@ export const loadUser = () => {
       dispatch({
         type: USER_LOADED,
         payload: res.data
-      })
+      });
     }
     catch (error) {
       dispatch({
@@ -58,11 +58,13 @@ export const register = user => {
     }
     catch (error) {
       const errors = error.response.data.errors;
+
       if (errors) {
         errors.forEach(error => {
           toastr.error('Error', error.msg)
         });
       }
+
       dispatch(reset('registerForm'))
       dispatch({
         type: REGISTER_FAIL

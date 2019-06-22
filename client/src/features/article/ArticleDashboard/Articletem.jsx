@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import Moment from 'react-moment'
+import Moment from 'react-moment';
 
 /* MUI Components */
 import Typography from '@material-ui/core/Typography';
@@ -27,57 +27,55 @@ const styles = theme => ({
   }
 })
 
-const PostItem = ({ post, classes, auth, removePost }) => {
+const ArticleItem = ({ article, classes, auth, removeArticle }) => {
   return (
-    <Grid item justifycontent="center" key={post.title} xs={12} md={6}>
+    <Grid item justifycontent="center" key={article.title} xs={12} md={6}>
       <Card className={classes.card}>
         <div className={classes.cardDetails}>
           <CardContent>
             <Typography component="h2" variant="h5">
-              {post.title}
+              {article.title}
             </Typography>
             <Typography variant="subtitle1" color="textSecondary">
-              <Moment format="MMMM Do YYYY">{post.date}</Moment>
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              Author: {post.name}
-            </Typography>
-            <Typography variant="subtitle1" paragraph>
-              {post.text.substring(0, 15)}...
+              <Moment format="MMMM Do YYYY">{article.date}</Moment>
             </Typography>
           </CardContent>
           <CardActions>
-            <Button component={Link} to={`post/${post._id}`} size="small" color="primary">
-              View
+            <Button component={Link} to={`article/${article._id}`} size="small" color="primary">
+              Read More
             </Button>
             {
               !auth.loading &&
-              post.user === auth.user._id &&
+              article.user === auth.user._id &&
               (
-                <Button onClick={() => removePost(post._id)} size="small" color="secondary">
+                <Button onClick={removeArticle(article._id)} size="small" color="secondary">
                   Remove
                 </Button>
               )
             }
           </CardActions>
         </div>
-        <Hidden xsDown>
-          <CardMedia
-            className={classes.cardMedia}
-            image={post.headerImgUrl}
-            title="Image title"
-          />
-        </Hidden>
+        {
+          article.headerImgUrl &&
+          <Hidden xsDown>
+            <CardMedia
+              className={classes.cardMedia}
+              image={article.headerImgUrl}
+
+              title={article.title}
+            />
+          </Hidden>
+        }
       </Card>
     </Grid>
   )
 }
 
-PostItem.propTypes = {
-  post: PropTypes.object.isRequired,
+ArticleItem.propTypes = {
+  article: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
-  removePost: PropTypes.func.isRequired
+  removeArticle: PropTypes.func.isRequired
 }
 
-export default withStyles(styles)(PostItem)
+export default withStyles(styles)(ArticleItem)

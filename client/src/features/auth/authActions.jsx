@@ -11,6 +11,7 @@ import { toastr } from 'react-redux-toastr';
 import { reset } from 'redux-form'
 import axios from 'axios';
 import setAuthToken from '../../app/common/util/setAuthToken';
+import { getArticles } from '../article/articleActions';
 
 export const loadUser = () => {
   return async dispatch => {
@@ -52,6 +53,7 @@ export const register = user => {
       });
       dispatch(loadUser());
       dispatch(reset('registerForm'));
+      dispatch(getArticles());
       toastr.success('Success', `Welcome ${user.name}`);
     }
     catch (error) {
@@ -77,7 +79,7 @@ export const login = user => {
       }
     };
     const body = JSON.stringify(user);
-    
+
     try {
       const res = await axios.post('/api/auth', body, config);
 
@@ -86,6 +88,7 @@ export const login = user => {
         payload: res.data
       });
       dispatch(loadUser());
+      dispatch(getArticles());
       dispatch(reset('loginForm'));
 
       toastr.success('Success', `Welcome back`);

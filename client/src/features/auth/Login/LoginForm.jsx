@@ -84,7 +84,7 @@ const LoginForm = ({ classes, handleSubmit, invalid, submitting, login, isAuthen
 
   // redirect if logged in
   if (isAuthenticated) {
-    return <Redirect to="/posts" />
+    return <Redirect to="/articles" />
   }
 
   return (

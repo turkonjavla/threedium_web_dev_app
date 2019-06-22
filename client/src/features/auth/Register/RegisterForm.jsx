@@ -114,7 +114,7 @@ const RegisterForm = ({ classes, handleSubmit, invalid, submitting, register, is
   }
 
   if (isAuthenticated) {
-    return <Redirect to="/posts" />
+    return <Redirect to="/articles" />
   }
 
   return (

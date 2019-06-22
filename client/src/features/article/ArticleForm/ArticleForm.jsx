@@ -3,21 +3,14 @@ import PropTypes from 'prop-types';
 import { Link as RouterLink, Redirect } from 'react-router-dom';
 import {
   combineValidators,
-  composeValidators,
-  isRequired,
-  createValidator,
-  hasLengthBetween,
-  matchesField,
-  hasLengthLessThan
+  isRequired
 } from 'revalidate';
 
 /* MUI Components */
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -31,56 +24,13 @@ import { Field, reduxForm } from 'redux-form';
 import TextInput from '../../../app/common/form/TextInput';
 
 /* Actions */
-import { register } from '../authActions';
-
-const isValidEmail = createValidator(
-  message => value => {
-    if (value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
-      return message
-    }
-  },
-  'Invalid email address'
-)
-
-const noWhitespace = createValidator(
-  message => value => {
-    if (value && !/^[\x21-\x7E]+$/i.test(value)) {
-      return message
-    }
-  },
-  'No whitespaces allowed'
-)
-
-const specialCharacters = createValidator(
-  message => value => {
-    if (value && !/^[a-zA-Z0-9#$&.+,"]*$/i.test(value)) {
-      return message
-    }
-  },
-  'Only | # | $ | & | . | + | , | allowed'
-)
+import { createArticle, getArticles } from '../articleActions';
 
 /* Validation */
 const validate = combineValidators({
-  name: composeValidators(
-    isRequired({ message: 'Please enter your full name' }),
-    hasLengthLessThan(300)({ message: 'You name can\'t be more than 300 characters' })
-  )(),
-  email: composeValidators(
-    isRequired('Email'),
-    isValidEmail
-  )(),
-  password: composeValidators(
-    isRequired('Password'),
-    hasLengthBetween(6, 30)({ message: 'Password must be between 6 and 30 characters' }),
-    noWhitespace,
-    specialCharacters
-  )(),
-  confirmPassword: composeValidators(
-    isRequired({ message: 'Please confirm your password' }),
-    matchesField('password')({ message: 'Passwords don\'t match' })
-  )()
-})
+  title: isRequired('Title'),
+  text: isRequired('Text')
+});
 
 const styles = theme => ({
   '@global': {
@@ -107,33 +57,31 @@ const styles = theme => ({
   },
 });
 
-const RegisterForm = ({ classes, handleSubmit, invalid, submitting, register, isAuthenticated }) => {
+const ArticleForm = ({ classes, handleSubmit, invalid, submitting, getArticles, isAuthenticated, createArticle, history: { push } }) => {
 
-  const registerUser = values => {
-    register(values);
+  const handleCreatePost = (values) => {
+    createArticle(values);
+    push('/articles');
   }
 
-  if (isAuthenticated) {
-    return <Redirect to="/articles" />
+  if (!isAuthenticated) {
+    return <Redirect to="/login" />
   }
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="sm">
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          New Article
         </Typography>
-        <form className={classes.form} noValidate onSubmit={handleSubmit(registerUser)}>
+        <form className={classes.form} noValidate onSubmit={handleSubmit(handleCreatePost)}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Field
                 autoComplete="off"
-                label="Full Name"
-                name="name"
+                label="Article Header Image URL"
+                name="headerImgUrl"
                 type="text"
                 variant="outlined"
                 component={TextInput}
@@ -142,31 +90,22 @@ const RegisterForm = ({ classes, handleSubmit, invalid, submitting, register, is
             <Grid item xs={12}>
               <Field
                 autoComplete="off"
-                label="Email Address"
-                name="email"
-                type="email"
+                label="Article Title"
+                name="title"
+                type="text"
                 variant="outlined"
                 component={TextInput}
               />
             </Grid>
             <Grid item xs={12}>
               <Field
-                autoComplete="off"
-                label="Password"
-                name="password"
-                type="password"
-                variant="outlined"
+                name="text"
+                type="text"
                 component={TextInput}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Field
-                autoComplete="off"
-                label="Confirm Password"
-                name="confirmPassword"
-                type="password"
+                multiline={true}
+                rows={10}
                 variant="outlined"
-                component={TextInput}
+                label="Write something here...."
               />
             </Grid>
           </Grid>
@@ -178,12 +117,12 @@ const RegisterForm = ({ classes, handleSubmit, invalid, submitting, register, is
             className={classes.submit}
             disabled={invalid || submitting}
           >
-            Sign Up
+            Submit
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link component={RouterLink} to="/login" variant="body2">
-                Already have an account? Sign in
+              <Link component={RouterLink} to="/articles" variant="body2">
+                Cancel
               </Link>
             </Grid>
           </Grid>
@@ -193,8 +132,8 @@ const RegisterForm = ({ classes, handleSubmit, invalid, submitting, register, is
   )
 }
 
-RegisterForm.propTypes = {
-  register: PropTypes.func.isRequired,
+ArticleForm.propTypes = {
+  createArticle: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
   classes: PropTypes.object.isRequired,
@@ -207,11 +146,12 @@ const mapStateToProps = state => ({
 });
 
 const actions = {
-  register
+  createArticle,
+  getArticles
 }
 
 export default compose(
   connect(mapStateToProps, actions),
-  reduxForm({ form: 'registerForm', validate }),
+  reduxForm({ form: 'articleForm', validate }),
   withStyles(styles)
-)(RegisterForm)
+)(ArticleForm)

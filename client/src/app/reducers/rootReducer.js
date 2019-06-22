@@ -4,14 +4,14 @@ import { reducer as toastrReducer } from 'react-redux-toastr';
 
 /* Reducers */
 import authReducer from '../../features/auth/authReducer';
-import postReducer from '../../features/post/postReducer';
+import articleReducer from '../../features/article/articleReducer';
 import asyncReducer from '../../features/async/asyncReducer';
 
 const rootReducer = combineReducers({
   form: formReducer,
   auth: authReducer,
   toastr: toastrReducer,
-  post: postReducer,
+  article: articleReducer,
   async: asyncReducer
 });
 

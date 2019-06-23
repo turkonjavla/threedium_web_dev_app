@@ -104,6 +104,66 @@ router.get('/:id', authMiddleware, async (req, res) => {
   }
 });
 
+// @route post api/posts/update/:id
+// @desc Update article
+// @access Private
+router.post('/update/:id', [
+  check('title', 'Title is required')
+    .not()
+    .isEmpty(),
+  check('text', 'Text is required')
+    .not()
+    .isEmpty(),
+  authMiddleware
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res
+        .status(400)
+        .json({ errors: errors.array() });
+    }
+
+    const post = await Post.findById(req.params.id);
+  
+
+    if (!post) {
+      return res
+        .status(404)
+        .json({ msg: 'Post not found' });
+    }
+
+    if (post.user.toString() !== req.user.id) {
+      return res
+        .status(401)
+        .json({ msg: 'User not authorized' });
+    }
+
+    if (req.body.title) { post.title = req.body.title; }
+    if (req.body.text) { post.text = req.body.text; }
+    post.headerImgUrl = req.body.headerImgUrl;
+
+    const updatedPost = await post.save();
+    res
+      .status(200)
+      .json(updatedPost);
+  }
+  catch (error) {
+    console.error(error.message);
+
+    if (error.kind === 'ObjectId') {
+      return res
+        .status(404)
+        .json({ msg: 'Article not found' });
+    }
+
+    res
+      .status(500)
+      .send('Server error');
+  }
+})
+
 // @route GET api/posts/:id
 // @desc Delete a post by id
 // @access Private

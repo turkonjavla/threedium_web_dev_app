@@ -9,8 +9,8 @@ import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import SignedOutLinks from '../Menu/SignedOutLinks';
-import SignedInLinks from '../Menu/SignedInLinks';
+import SignedOutLinks from '../Menu/SignedOutMenu';
+import SignedInLinks from '../Menu/SignedInMenu';
 
 /* Actions */
 import { logout } from '../../auth/authActions';
@@ -27,17 +27,22 @@ const styles = theme => ({
 
 class NavBar extends Component {
   render() {
-    const { classes, isAuthenticated, logout } = this.props;
+    const { classes, isAuthenticated, logout, user } = this.props;
     return (
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <Typography component={Link} to="/" variant="h6" color="inherit" className={classes.title}>
+            <Typography component={Link} to="/articles" variant="h6" color="inherit" className={classes.title}>
               Threedium
             </Typography>
             {
-              isAuthenticated ?
-                <SignedInLinks logout={logout} /> : <SignedOutLinks />
+              user &&
+                isAuthenticated
+                ? (<SignedInLinks
+                  logout={logout}
+                  user={user}
+                />)
+                : (<SignedOutLinks />)
             }
           </Toolbar>
         </AppBar>
@@ -49,11 +54,13 @@ class NavBar extends Component {
 NavBar.propTypes = {
   isAuthenticated: PropTypes.bool,
   classes: PropTypes.object.isRequired,
-  logout: PropTypes.func.isRequired
+  logout: PropTypes.func.isRequired,
+  user: PropTypes.object
 }
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  user: state.auth.user
 });
 
 const actions = {

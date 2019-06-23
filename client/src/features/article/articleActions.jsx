@@ -120,7 +120,7 @@ export const createArticle = articleData => {
         payload: res.data
       });
 
-      toastr.success('Success', "Post created");
+      toastr.success('Success', "Article created");
       dispatch(asyncActionFinish());
     }
     catch (error) {

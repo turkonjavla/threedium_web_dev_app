@@ -25,6 +25,7 @@ import { getArticle, unmountArticle } from '../articleActions';
 const styles = theme => ({
   mainGrid: {
     marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(3)
   },
   card: {
     width: '100%',
@@ -60,7 +61,6 @@ class ArticleDetailsPage extends Component {
 
     if (loading || article === null) return <LoadingComponent />
     return (
-
       <Container maxWidth="lg">
         <Grid container spacing={4} className={classes.mainGrid}>
           <Card className={classes.card}>
@@ -94,7 +94,6 @@ class ArticleDetailsPage extends Component {
           </Card>
         </Grid>
       </Container>
-
     )
   }
 }

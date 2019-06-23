@@ -30,6 +30,7 @@ class App extends Component {
     this.props.loadUser();
     this.props.getArticles();
   }
+  
   render() {
     return (
       <Fragment>

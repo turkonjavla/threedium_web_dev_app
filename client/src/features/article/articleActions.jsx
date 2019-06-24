@@ -5,7 +5,8 @@ import {
   FETCH_ARTICLE,
   CREATE_ARTICLE,
   REMOVE_ARTICLE,
-  UNMOUNT_ARTICLE
+  UNMOUNT_ARTICLE,
+  UPDATE_ARTICLE
 } from './articleConstants';
 import {
   asyncActionStart,
@@ -58,6 +59,36 @@ export const getArticle = id => {
       await delay(1000);
 
       dispatch(fetchArticle(res.data));
+      dispatch(asyncActionFinish());
+    }
+    catch (error) {
+      console.log(error);
+      dispatch(asyncActionError());
+    }
+  }
+}
+
+export const updateArticle = articleData => {
+  return async dispatch => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    const body = JSON.stringify(articleData);
+
+    try {
+      dispatch(asyncActionStart());
+      const res = await axios.post(`/api/posts/update/${articleData._id}`, body, config);
+
+      await delay(1000);
+
+      dispatch({
+        type: UPDATE_ARTICLE,
+        payload: res.data
+      });
+      toastr.success('Updated', 'Article updated')
       dispatch(asyncActionFinish());
     }
     catch (error) {

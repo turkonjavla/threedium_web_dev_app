@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, Redirect } from 'react-router-dom';
 import {
   combineValidators,
   isRequired
@@ -74,7 +74,11 @@ class EditArticleForm extends Component {
   }
 
   render() {
-    const { classes, invalid, submitting, pristine, loading, handleSubmit } = this.props;
+    const { classes, invalid, submitting, pristine, loading, handleSubmit, isAuthenticated } = this.props;
+
+    if (!isAuthenticated) {
+      return <Redirect to="/login" />
+    }
 
     if (loading) return <LoadingComponent />
     return (

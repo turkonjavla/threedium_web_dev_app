@@ -13,6 +13,7 @@ import LoginForm from '../../features/auth/Login/LoginForm';
 import ArticleForm from '../../features/article/ArticleForm/ArticleForm';
 import ArticleDetailsPage from '../../features/article/ArticleDetails/ArticleDetailsPage';
 import PrivateRoute from '../common/util/PrivateRoute';
+import EditArticleForm from '../../features/article/ArticleForm/EditArticleForm';
 
 /* Actions */
 import { loadUser } from '../../features/auth/authActions';
@@ -30,7 +31,7 @@ class App extends Component {
     this.props.loadUser();
     this.props.getArticles();
   }
-  
+
   render() {
     return (
       <Fragment>
@@ -41,6 +42,7 @@ class App extends Component {
           <Route exact path="/login" component={LoginForm} />
           <PrivateRoute exact path="/articles" component={ArticleDashboard} />
           <PrivateRoute exact path="/article/add" component={ArticleForm} />
+          <PrivateRoute exact path="/article/edit/:id" component={EditArticleForm} />
           <PrivateRoute exact path="/article/:id" component={ArticleDetailsPage} />
         </Switch>
       </Fragment>

@@ -12,6 +12,7 @@ import ArticleItem from './Articletem';
 /* Actions */
 import { getArticles, removeArticle } from '../articleActions';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
+import Pagination from '../../../app/common/util/Pagination';
 
 const styles = theme => ({
   mainGrid: {
@@ -20,21 +21,36 @@ const styles = theme => ({
 });
 
 class ArticleDashboard extends Component {
+  state = {
+    currentPage: 1,
+    articlesPerPage: 6
+  }
+
   handleRemoveArticle = articleId => () => {
     this.props.removeArticle(articleId);
   }
 
+  handlePaginate = pageNumber => () => {
+    this.setState({
+      currentPage: pageNumber
+    })
+  }
+
   render() {
     const { articles, classes, auth, loading } = this.props;
+    const { currentPage, articlesPerPage } = this.state;
+    const indexOfLastArticle = currentPage * articlesPerPage;
+    const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
+    const currentArticle = articles.slice(indexOfFirstArticle, indexOfLastArticle);
 
     if (loading) return <LoadingComponent />
     return (
       <Container maxWidth="lg">
         <Grid container spacing={4} className={classes.mainGrid}>
           {
-            articles &&
-              articles.length > 0 ?
-              articles.map(article =>
+            currentArticle &&
+              currentArticle.length > 0 ?
+              currentArticle.map(article =>
                 <ArticleItem
                   removeArticle={this.handleRemoveArticle}
                   key={article._id}
@@ -43,6 +59,20 @@ class ArticleDashboard extends Component {
                 />
               ) : <Typography>There are no articles</Typography>
           }
+        </Grid>
+        <Grid
+          container
+          direction="row"
+          justify="center"
+          alignItems="center"
+          style={{ marginTop: '2em' }}
+        >
+          <Pagination
+            currentPage={currentPage}
+            paginate={this.handlePaginate}
+            articlesPerPage={articlesPerPage}
+            totalArticles={articles.length}
+          />
         </Grid>
       </Container>
     )
@@ -61,7 +91,9 @@ ArticleDashboard.propTypes = {
 const mapStateToProps = state => ({
   articles: state.article.articles,
   auth: state.auth,
-  loading: state.async.loading
+  loading: state.async.loading,
+  currentPage: state.article.currentPage,
+  articlesPerPage: state.article.articlesPerPage
 });
 
 const actions = {

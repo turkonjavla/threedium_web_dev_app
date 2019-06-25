@@ -204,4 +204,37 @@ router.delete('/:id', authMiddleware, async (req, res) => {
   }
 });
 
+// @route GET api/posts/user/:user_id
+// @desc Get posts by user id
+// @access Private
+router.get('/user/:user_id', authMiddleware, async (req, res) => {
+  try {
+    const posts = await Post
+      .find({ user: req.params.user_id })
+      .populate('User', ['name', 'avatar']);
+
+    if (!posts) {
+      return res
+        .status(400)
+        .json({ msg: 'Articles not found' });
+    }
+    res
+      .status(200)
+      .json(posts);
+  }
+  catch (error) {
+    console.error(error.message);
+
+    if (error.kind === 'ObjectId') {
+      return res
+        .status(404)
+        .json({ msg: 'Article not found' });
+    }
+
+    res
+      .status(500)
+      .send('Server error');
+  }
+});
+
 module.exports = router;

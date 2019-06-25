@@ -37,9 +37,12 @@ const ArticleItem = ({ article, classes, auth, removeArticle }) => {
             <Typography variant="subtitle1" color="textSecondary">
               <Moment format="MMMM Do YYYY">{article.date}</Moment>
             </Typography>
+            <Typography component={Link} to={`/articles/user/${article.user}`}>
+              {article.name}
+            </Typography>
           </CardContent>
           <CardActions>
-            <Button component={Link} to={`article/${article._id}`} size="small" color="primary">
+            <Button component={Link} to={`/article/${article._id}`} size="small" color="primary">
               Read More
             </Button>
             {
@@ -47,12 +50,12 @@ const ArticleItem = ({ article, classes, auth, removeArticle }) => {
               article.user === auth.user._id &&
               (
                 <Fragment>
-                  <Button component={Link} to={`article/edit/${article._id}`} size="small">
+                  <Button component={Link} to={`/article/edit/${article._id}`} size="small">
                     Edit
                   </Button>
-                  <Button onClick={removeArticle(article._id)} size="small" color="secondary">
+                  {/*         <Button onClick={removeArticle(article._id)} size="small" color="secondary">
                     Remove
-                  </Button>
+                  </Button> */}
                 </Fragment>
               )
             }

@@ -14,6 +14,8 @@ import ArticleForm from '../../features/article/ArticleForm/ArticleForm';
 import ArticleDetailsPage from '../../features/article/ArticleDetails/ArticleDetailsPage';
 import PrivateRoute from '../common/util/PrivateRoute';
 import EditArticleForm from '../../features/article/ArticleForm/EditArticleForm';
+import UserArticles from '../../features/article/ArticleDashboard/UserArticles';
+
 
 /* Actions */
 import { loadUser } from '../../features/auth/authActions';
@@ -44,6 +46,7 @@ class App extends Component {
           <PrivateRoute exact path="/article/add" component={ArticleForm} />
           <PrivateRoute exact path="/article/edit/:id" component={EditArticleForm} />
           <PrivateRoute exact path="/article/:id" component={ArticleDetailsPage} />
+          <PrivateRoute exact path="/articles/user/:user_id" component={UserArticles} />
         </Switch>
       </Fragment>
     )

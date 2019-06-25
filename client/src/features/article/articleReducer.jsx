@@ -4,12 +4,14 @@ import {
   CREATE_ARTICLE,
   REMOVE_ARTICLE,
   UNMOUNT_ARTICLE,
-  UPDATE_ARTICLE
+  UPDATE_ARTICLE,
+  FETCH_USER_ARTICLES
 } from './articleConstants';
 import { createReducer } from '../../app/common/util/reducerUtil';
 
 const initialState = {
   articles: [],
+  userArticles: [],
   article: null
 };
 
@@ -18,6 +20,13 @@ export const fetchArticles = (state, payload) => {
     ...state,
     articles: payload
   };
+}
+
+export const fetchUserArticles = (state, payload) => {
+  return {
+    ...state,
+    userArticles: payload
+  }
 }
 
 export const fetchArticle = (state, payload) => {
@@ -66,5 +75,6 @@ export default createReducer(initialState, {
   [UPDATE_ARTICLE]: updateArticle,
   [REMOVE_ARTICLE]: removeArticle,
   [FETCH_ARTICLE]: fetchArticle,
+  [FETCH_USER_ARTICLES]: fetchUserArticles,
   [UNMOUNT_ARTICLE]: unmountArticle
 });

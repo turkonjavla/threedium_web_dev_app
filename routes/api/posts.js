@@ -104,7 +104,7 @@ router.get('/:id', authMiddleware, async (req, res) => {
   }
 });
 
-// @route post api/posts/update/:id
+// @route POST api/posts/update/:id
 // @desc Update article
 // @access Private
 router.post('/update/:id', [
@@ -126,7 +126,7 @@ router.post('/update/:id', [
     }
 
     const post = await Post.findById(req.params.id);
-  
+
 
     if (!post) {
       return res
@@ -164,7 +164,7 @@ router.post('/update/:id', [
   }
 })
 
-// @route GET api/posts/:id
+// @route DELETE api/posts/:id
 // @desc Delete a post by id
 // @access Private
 router.delete('/:id', authMiddleware, async (req, res) => {

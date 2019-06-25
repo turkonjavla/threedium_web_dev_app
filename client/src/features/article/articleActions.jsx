@@ -6,7 +6,8 @@ import {
   CREATE_ARTICLE,
   REMOVE_ARTICLE,
   UNMOUNT_ARTICLE,
-  UPDATE_ARTICLE
+  UPDATE_ARTICLE,
+  FETCH_USER_ARTICLES
 } from './articleConstants';
 import {
   asyncActionStart,
@@ -59,6 +60,27 @@ export const getArticle = id => {
       await delay(1000);
 
       dispatch(fetchArticle(res.data));
+      dispatch(asyncActionFinish());
+    }
+    catch (error) {
+      console.log(error);
+      dispatch(asyncActionError());
+    }
+  }
+}
+
+export const fetchUserArticles = id => {
+  return async dispatch => {
+    try {
+      dispatch(asyncActionStart());
+      const res = await axios.get(`/api/posts/user/${id}`);
+
+      await delay(1000);
+
+      dispatch({
+        type: FETCH_USER_ARTICLES,
+        payload: res.data
+      });
       dispatch(asyncActionFinish());
     }
     catch (error) {

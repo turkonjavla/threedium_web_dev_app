@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import Moment from 'react-moment';
@@ -66,7 +67,7 @@ class ArticleDetailsPage extends Component {
           <Card className={classes.card}>
             <CardHeader
               avatar={
-                <Avatar alt="Remy Sharp" src={article.avatar} className={classes.avatar}>
+                <Avatar alt={article.name} src={article.avatar} className={classes.avatar}>
                   R
                 </Avatar>
               }

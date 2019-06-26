@@ -32,7 +32,7 @@ class NavBar extends Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <Typography component={Link} to="/articles" variant="h6" color="inherit" className={classes.title}>
+            <Typography component={Link} to="/" variant="h6" color="inherit" className={classes.title}>
               Threedium
             </Typography>
             {

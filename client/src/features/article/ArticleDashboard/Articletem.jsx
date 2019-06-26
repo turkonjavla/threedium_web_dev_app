@@ -29,7 +29,7 @@ const styles = theme => ({
 const ArticleItem = ({ article, classes, auth, removeArticle, loading }) => {
   if (loading) return <LoadingComponent />
   return (
-    <Grid item justifycontent="center" key={article.title} xs={12} md={6}>
+    <Grid item justifycontent="center" key={article._id} xs={12} md={6}>
       <Card className={classes.card}>
         <div className={classes.cardDetails}>
           <CardContent>

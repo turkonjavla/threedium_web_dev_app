@@ -15,7 +15,7 @@ import ArticleDetailsPage from '../../features/article/ArticleDetails/ArticleDet
 import PrivateRoute from '../common/util/PrivateRoute';
 import EditArticleForm from '../../features/article/ArticleForm/EditArticleForm';
 import UserArticles from '../../features/article/ArticleDashboard/UserArticles';
-
+import HomePage from '../../features/Home/HomePage';
 
 /* Actions */
 import { loadUser } from '../../features/auth/authActions';
@@ -40,6 +40,7 @@ class App extends Component {
         <CssBaseline />
         <NavBar />
         <Switch>
+          <Route exact path="/" component={HomePage} />
           <Route exact path="/register" component={RegisterForm} />
           <Route exact path="/login" component={LoginForm} />
           <PrivateRoute exact path="/articles" component={ArticleDashboard} />

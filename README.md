@@ -8,11 +8,9 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-Make sure that you have the latest version of Node.js installed on your machine
-
 ```
-[Node.js](https://nodejs.org/en/)
-[Git](https://git-scm.com/)
+Node.js
+Git
 ```
 
 ### Installing

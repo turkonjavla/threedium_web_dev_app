@@ -64,7 +64,7 @@ class EditArticleForm extends Component {
   }
 
   async componentWillUnmount() {
-    await this.props.unmountArticle();
+    this.props.unmountArticle();
     this.props.getArticles();
   }
 

@@ -1,13 +1,7 @@
 import {
   REGISTER_USER,
   LOAD_USER,
-  REGISTER_SUCCESS,
-  REGISTER_FAIL,
-  USER_LOADED,
   AUTH_ERROR,
-  LOGIN_SUCCESS,
-  LOGIN_FAIL,
-  LOGOUT,
   LOGOUT_USER,
   LOGIN_USER
 } from './authConstants';
@@ -16,7 +10,6 @@ import { reset } from 'redux-form'
 import axios from 'axios';
 import setAuthToken from '../../app/common/util/setAuthToken';
 import { getArticles } from '../article/articleActions';
-import { asyncActionStart, asyncActionFinish, asyncActionError } from '../async/asyncActions';
 
 export const loadUser = () => {
   return async dispatch => {
@@ -26,14 +19,12 @@ export const loadUser = () => {
     }
 
     try {
-      dispatch(asyncActionStart());
       const res = await axios.get('/api/auth');
 
       dispatch({
         type: LOAD_USER,
         payload: res.data
       });
-      dispatch(asyncActionFinish());
     }
     catch (error) {
       const errors = error.response.data.errors;
@@ -43,8 +34,9 @@ export const loadUser = () => {
           toastr.error('Error', error.msg)
         });
       }
-
-      dispatch(asyncActionError());
+      dispatch({
+        type: AUTH_ERROR
+      });
     }
   }
 }
@@ -60,8 +52,6 @@ export const register = user => {
     const body = JSON.stringify(user);
 
     try {
-      dispatch(asyncActionStart());
-
       const res = await axios.post('/api/users', body, config);
 
       dispatch({
@@ -70,10 +60,8 @@ export const register = user => {
       });
 
       toastr.success('Success', `Welcome ${user.name}`);
-
-      dispatch(asyncActionFinish());
-      await dispatch(loadUser());
-      await dispatch(getArticles());
+      dispatch(loadUser());
+      dispatch(getArticles());
     }
     catch (error) {
       const errors = error.response.data.errors;
@@ -88,7 +76,6 @@ export const register = user => {
         type: AUTH_ERROR
       });
       dispatch(reset('registerForm'));
-      dispatch(asyncActionError());
     }
   }
 }
@@ -103,17 +90,14 @@ export const login = user => {
     const body = JSON.stringify(user);
 
     try {
-      dispatch(asyncActionStart());
       const res = await axios.post('/api/auth', body, config);
 
       dispatch({
         type: LOGIN_USER,
         payload: res.data
       });
-      dispatch(asyncActionFinish());
-      await dispatch(loadUser());
-      await dispatch(getArticles());
-      await dispatch(reset('loginForm'));
+      dispatch(loadUser());
+      dispatch(getArticles());
       toastr.success('Success', `Welcome back`);
     }
     catch (error) {

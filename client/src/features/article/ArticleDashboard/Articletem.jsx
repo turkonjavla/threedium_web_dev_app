@@ -12,6 +12,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
 
 const styles = theme => ({
   card: {
@@ -25,7 +26,8 @@ const styles = theme => ({
   }
 })
 
-const ArticleItem = ({ article, classes, auth, removeArticle }) => {
+const ArticleItem = ({ article, classes, auth, removeArticle, loading }) => {
+  if (loading) return <LoadingComponent />
   return (
     <Grid item justifycontent="center" key={article.title} xs={12} md={6}>
       <Card className={classes.card}>
@@ -46,7 +48,7 @@ const ArticleItem = ({ article, classes, auth, removeArticle }) => {
               Read More
             </Button>
             {
-              !auth.loading &&
+              !loading &&
               article.user === auth.user._id &&
               (
                 <Fragment>

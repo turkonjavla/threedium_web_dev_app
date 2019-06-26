@@ -56,6 +56,7 @@ class ArticleDashboard extends Component {
                   key={article._id}
                   article={article}
                   auth={auth}
+                  loading={loading}
                 />
               ) : <Typography>There are no articles</Typography>
           }

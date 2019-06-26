@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
@@ -42,6 +43,8 @@ class ArticleDashboard extends Component {
     const indexOfLastArticle = currentPage * articlesPerPage;
     const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
     const currentArticle = articles.slice(indexOfFirstArticle, indexOfLastArticle);
+
+    if (!auth.isAuthenticated) return <Redirect to="/login" />
 
     if (loading) return <LoadingComponent />
     return (

@@ -39,8 +39,8 @@ const ArticleItem = ({ article, classes, auth, removeArticle, loading }) => {
             <Typography variant="subtitle1" color="textSecondary">
               <Moment format="MMMM Do YYYY">{article.date}</Moment>
             </Typography>
-            <Typography component={Link} to={`/articles/user/${article.user}`}>
-              {article.name}
+            <Typography style={{textDecoration: 'none'}} color="primary" variant="body1" component={Link} to={`/articles/user/${article.user}`}>
+              Posted by {article.name}
             </Typography>
           </CardContent>
           <CardActions>
@@ -55,9 +55,9 @@ const ArticleItem = ({ article, classes, auth, removeArticle, loading }) => {
                   <Button component={Link} to={`/article/edit/${article._id}`} size="small">
                     Edit
                   </Button>
-                  {/*         <Button onClick={removeArticle(article._id)} size="small" color="secondary">
+                  <Button onClick={removeArticle(article._id)} size="small" color="secondary">
                     Remove
-                  </Button> */}
+                  </Button>
                 </Fragment>
               )
             }

@@ -21,7 +21,7 @@ import Avatar from '@material-ui/core/Avatar';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 
 /* Actions */
-import { getArticle, unmountArticle } from '../articleActions';
+import { getArticle, unmountArticle, removeArticle } from '../articleActions';
 
 const styles = theme => ({
   mainGrid: {
@@ -67,9 +67,14 @@ class ArticleDetailsPage extends Component {
           <Card className={classes.card}>
             <CardHeader
               avatar={
-                <Avatar alt={article.name} src={article.avatar} className={classes.avatar}>
-                  R
-                </Avatar>
+                <Avatar
+                  component={Link}
+                  to={`/articles/user/${article.user}`}
+                  alt={article.name}
+                  src={article.avatar}
+                  className={classes.avatar}
+                />
+
               }
               title={article.title}
               subheader={
@@ -103,6 +108,7 @@ ArticleDetailsPage.propTypes = {
   getArticle: PropTypes.func.isRequired,
   article: PropTypes.object,
   loading: PropTypes.bool.isRequired,
+  removeArticle: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -112,7 +118,8 @@ const mapStateToProps = state => ({
 
 const actions = {
   getArticle,
-  unmountArticle
+  unmountArticle,
+  removeArticle
 }
 
 export default compose(
